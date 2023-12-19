@@ -11,7 +11,7 @@ if __name__ == '__main__':
     conn = sqlite3.connect('database.sqlite')
     cursor = conn.cursor()
 
-    execute_script(cursor, 'sql/tables_init.sql')
+    execute_script(cursor, 'sql/sqlite3/tables_init.sql')
 
     conn.commit()
     conn.close()

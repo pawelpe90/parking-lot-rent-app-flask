@@ -6,6 +6,7 @@ from pydantic import ValidationError
 from models import User
 from werkzeug.security import generate_password_hash
 from exceptions import *
+from db_handlers.sqlite3.db_handler_sqlite3 import reserve_parking_lot_handler_sqlite3
 
 database_bp = Blueprint('database_endpoints', __name__, template_folder='db_templates')
 
@@ -16,11 +17,8 @@ def reserve_parking_lot():
     parking_lot_id = int(request.form['id'])
     parking_lot_number = int(request.form['number'])
 
-    conn = get_connection()
-    c = conn.cursor()
-
-    c.execute("""UPDATE "parking_lots" SET "taken" = 1, "taken_by" = ? WHERE "id" = ?""", (username, parking_lot_id))
-    conn.commit()
+    # DB handler
+    reserve_parking_lot_handler_sqlite3(username=username, parking_lot_id=parking_lot_id)
 
     return render_template('reservation_confirm.html', parking_lot_number=parking_lot_number)
 
